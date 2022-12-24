@@ -1,0 +1,14 @@
+logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.3
+    container_name: logstashFromKafka
+    # It Links elasticsearch container & kafkaserver container  & logstash container to communicate
+    links:
+      - kafka:kafka
+    # Configures docker image to run in bridge mode network
+    networks:
+      - kafkanet
+    # You can control the order of service startup and shutdown with the depends_on option.
+    depends_on: ['elasticsearch', 'kafkaserver']
+    # Mount host volumes into docker containers to supply logstash.config file
+    volumes:
+      - '/private/config-dir:/usr/share/logstash/pipeline/'
